@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_cors import CORS
+from flask_sslify import SSLify
 
 from src.views.home_view import home
 from src.views.widget_view import widget_view
@@ -7,6 +8,7 @@ from src.views.chat_view import chat
 
 app = Flask(__name__)
 CORS(app)
+sslify = SSLify(app)
 
 
 @app.route("/")
