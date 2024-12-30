@@ -18,7 +18,7 @@ def chat_completion_open_web_ui(messages: List[Dict[str, str]]) -> str:
     }
 
     payload = {
-        "model": "accounts/fireworks/models/mixtral-8x22b-instruct",
+        "model": config.FIREWORKS_BASE_MODEL,
         "messages": messages,
         "files": [
             {"type": "collection", "id": "19e01a6a-2aed-4fa4-8ca7-54fff508546d"}
