@@ -11,5 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+EXPOSE 3000
+
 # Run Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:3000", "run:app"]
+CMD ["gunicorn", "--bind", "127.0.0.1:3000", "run:app"]
