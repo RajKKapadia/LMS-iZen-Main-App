@@ -16,7 +16,7 @@ chat = Blueprint(
 logger = logging.getLogger(__name__)
 
 
-@chat.post("/")
+@chat.post("/talk")
 def handle_get():
     data = request.get_json()
     messages = data["messages"]
