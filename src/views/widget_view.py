@@ -1,4 +1,4 @@
-from flask import Blueprint, send_file, request
+from flask import Blueprint, send_file
 
 from src import logging
 
@@ -10,6 +10,4 @@ logger = logging.getLogger(__name__)
 
 @widget_view.get("/chatWidget.js")
 def handle_get():
-    data = request.args.to_dict()
-    logger.info(data)
     return send_file('static/chatWidget.js', mimetype='application/javascript')

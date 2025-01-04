@@ -1,5 +1,11 @@
 // Embeddable chat widget JavaScript
 (function () {
+
+    const scriptTag = document.getElementById('chat-widget-script');
+    const userId = scriptTag.getAttribute('data-user-id'); // Extract userId from data attribute
+
+    console.log(userId)
+
     // CSS styles for the chat widget
     const styles = `
     #chat-widget {
@@ -83,7 +89,7 @@
     // HTML structure for the chat widget
     const widgetHTML = `
     <div id="chat-widget">
-        <div id="chat-header">Chatbot
+        <div id="chat-header">ZenLight
             <span id="close-btn">&times;</span>
         </div>
         <div id="chat-history"></div>
@@ -166,7 +172,8 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    messages: conversation, // Send the entire conversation history
+                    userId: userId,
+                    messages: conversation // Send the entire conversation history
                 }),
             });
 
@@ -176,7 +183,9 @@
             //         'Content-Type': 'application/json'
             //     },
             //     body: JSON.stringify({
-            //         messages: conversation, // Send the entire conversation history
+            //         user_id: userId,
+            //         messages: conversation // Send the entire conversation history,
+
             //     }),
             // });
 

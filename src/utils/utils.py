@@ -1,14 +1,23 @@
-from typing import Dict, List
+from pydantic import BaseModel
+from typing import Dict, List, Optional
 
 import requests
 
 from src import logging
 from config import config
 
+
 logger = logging.getLogger(__name__)
 
 
-def chat_completion_open_web_ui(messages: List[Dict[str, str]]) -> str:
+class ChatRequest(BaseModel):
+    messages: List[Dict[str, str]] = []
+    user_id: Optional[str] = ""
+    database_schema_string: Optional[str] = ""
+    query: Optional[str] = ""
+
+
+def chat_completion_open_web_ui(new_chat: ChatRequest) -> str:
     # API endpoint
     url = f"{config.OPEN_WEB_UI_ENDPOINT}/api/chat/completions"
 
@@ -19,7 +28,7 @@ def chat_completion_open_web_ui(messages: List[Dict[str, str]]) -> str:
 
     payload = {
         "model": config.OPEN_WEB_UI_MODEL,
-        "messages": messages,
+        "messages": new_chat.messages,
         "files": [
             {"type": "collection", "id": "19e01a6a-2aed-4fa4-8ca7-54fff508546d"}
         ]

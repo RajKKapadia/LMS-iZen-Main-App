@@ -8,6 +8,7 @@ from config import config
 from src import logging
 from src.utils.database_functions import DatabaseManager, get_database_schema_string
 from src.utils.prompts import get_chat_completion_request_system_message, get_sql_tool
+from src.utils.utils import ChatRequest
 
 logger = logging.getLogger(__name__)
 
@@ -18,10 +19,6 @@ client = OpenAI(
 
 
 db_manager = DatabaseManager()
-
-
-sql_tool = get_sql_tool(
-    database_schema_string=get_database_schema_string(db_manager))
 
 
 def get_decision_response(messages: List[Dict[str, str]]) -> Dict[str, str]:
@@ -46,12 +43,14 @@ def get_decision_response(messages: List[Dict[str, str]]) -> Dict[str, str]:
         }
 
 
-def tool_chat_completion(messages: List[Dict[str, str]]) -> ChatCompletion | None:
+def tool_chat_completion(new_chat: ChatRequest) -> ChatCompletion | None:
+    sql_tool = get_sql_tool(
+        database_schema_string=get_database_schema_string(db_manager), user_id=new_chat.user_id)
     try:
         new_messages = []
         system_message = get_chat_completion_request_system_message()
         new_messages.append(system_message)
-        for message in messages:
+        for message in new_chat.messages:
             new_messages.append(message)
 
         response = client.chat.completions.create(
