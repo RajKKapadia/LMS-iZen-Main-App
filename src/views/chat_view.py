@@ -33,11 +33,13 @@ def handle_get():
 
     if response["needsDatabase"] == "yes":
         content = handle_chat_completion(query=query, messages=messages)
+        logger.info(content)
         return jsonify({
             "message": content
         })
     else:
         content = chat_completion_open_web_ui(messages=messages)
+        logger.info(content)
         return jsonify({
             "message": content
         })
