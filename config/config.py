@@ -17,5 +17,6 @@ FIREWORKS_API_ENDPOINT = os.getenv('FIREWORKS_API_ENDPOINT')
 
 OPEN_WEB_UI_ENDPOINT = os.getenv("OPEN_WEB_UI_ENDPOINT")
 OPEN_WEB_UI_API_KEY = os.getenv("OPEN_WEB_UI_API_KEY")
+OPEN_WEB_UI_MODEL = os.getenv("OPEN_WEB_UI_MODEL")
 
 ERROR_MESSAGE = "An error occurred. Please try again later."
