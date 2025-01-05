@@ -24,9 +24,9 @@ def handle_get():
     query = new_chat.messages[-1]["content"]
     new_chat.query = query
 
-    logger.info(query)
-    logger.info(messages)
-    logger.info(new_chat.user_id)
+    logger.info(f"Query: {query}")
+    logger.info(f"Messages: {messages}")
+    logger.info(f"User id: {new_chat.user_id}")
 
     decision_prompt = get_decision_prompt(new_chat=new_chat)
     response = get_decision_response(messages=[{

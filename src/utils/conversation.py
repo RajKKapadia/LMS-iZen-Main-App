@@ -21,20 +21,20 @@ def handle_chat_completion(new_chat: ChatRequest) -> str:
     assistant_message = chat_response.choices[0].message
     logger.info(assistant_message)
     if assistant_message.content == None:
-        '''Call SQL and generate the response.
-        '''
+        """Call SQL and generate the response.
+        """
         if assistant_message.tool_calls[0].function.name == "ask_database":
             sql_query = json.loads(
                 assistant_message.tool_calls[0].function.arguments)["query"]
-            logger.info(f'SQL query -> {sql_query}')
+            logger.info(f"SQL query -> {sql_query}")
             sql_response = db_manager.execute_query(sql_query)
-            logger.info(f'SQL response -> {sql_response}')
-        if sql_response == '':
+            logger.info(f"SQL response -> {sql_response}")
+        if sql_response == "":
             chat_completion_prompt = get_chat_completion_prompt(
                 new_chat.query, new_chat.messages[:-1])
             messages = []
             messages.append(
-                {'role': 'user', 'content': chat_completion_prompt})
+                {"role": "user", "content": chat_completion_prompt})
             response = general_chat_completion(messages=messages)
         else:
             messages = get_format_sql_response_messages(

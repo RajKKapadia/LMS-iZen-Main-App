@@ -114,7 +114,7 @@ class DatabaseManager:
                     return json.dumps(results, default=DataSerializer.serialize)
         except MySQLError as e:
             print(f"Query execution error: {e}")
-            raise
+            return ""
 
 
 def get_database_schema_string(db_manager: DatabaseManager) -> str:
