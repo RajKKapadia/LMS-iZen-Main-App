@@ -46,6 +46,7 @@ def get_decision_response(messages: List[Dict[str, str]]) -> Dict[str, str]:
 def tool_chat_completion(new_chat: ChatRequest) -> ChatCompletion | None:
     sql_tool = get_sql_tool(
         database_schema_string=get_database_schema_string(db_manager), user_id=new_chat.user_id)
+    logger.info(sql_tool)
     try:
         new_messages = []
         system_message = get_chat_completion_request_system_message()

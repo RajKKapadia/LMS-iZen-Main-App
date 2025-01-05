@@ -166,6 +166,8 @@
     // Function to call OpenAI API with conversation history
     const fetchOpenAIResponse = async () => {
         try {
+            console.log("User id in the function.")
+            console.log(userId)
             const response = await fetch(`https://staging-ai-js.izen.ai/api/chat/talk`, {
                 method: 'POST',
                 headers: {
