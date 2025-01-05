@@ -17,11 +17,11 @@ def get_sql_tool(database_schema_string: str, user_id: str) -> List[Dict]:
                         "query": {
                             "type": "string",
                             "description": f"""MySQL query extracting info to answer the user's question.
-- MySQL should be written using this database schema: {database_schema_string}
+- Only use column names and table names explicitly defined in this database schema: {database_schema_string}.
+- Do not reference or assume any columns or tables outside of this schema.
 - If the question pertains to user-specific data, include `WHERE user_id = {user_id}` in the query.
 - Today's date is: {datetime.now().strftime("%Y-%m-%d")}
-- The query should be returned in plain text, not in JSON.
-- Don't assume any column names that are not in the database schema."""
+- The query should be returned in plain text, not in JSON."""
                         }
                     },
                     "required": ["query"],
