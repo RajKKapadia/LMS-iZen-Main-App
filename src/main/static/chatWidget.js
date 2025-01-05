@@ -172,7 +172,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    userId: userId,
+                    user_id: userId,
                     messages: conversation // Send the entire conversation history
                 }),
             });
