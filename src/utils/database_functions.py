@@ -85,6 +85,17 @@ class DatabaseManager:
                 cursor.execute(query, (config.MYSQL_DB_NAME,))
                 return [table[0] for table in cursor]
 
+    def get_sample_row(self, table_name: str) -> Optional[Dict[str, Any]]:
+        query = f"SELECT * FROM {table_name} LIMIT 1"
+        try:
+            with self.db_config.get_connection() as conn:
+                with conn.cursor(dictionary=True) as cursor:
+                    cursor.execute(query)
+                    row = cursor.fetchone()
+                    return row
+        except MySQLError as e:
+            return None
+
     def get_column_info(self, table_name: str) -> List[Tuple[str, str]]:
         query = """
             SELECT COLUMN_NAME, DATA_TYPE
@@ -100,7 +111,8 @@ class DatabaseManager:
         return [
             {
                 "table_name": table_name,
-                "column_names": self.get_column_info(table_name)
+                "columns": self.get_column_info(table_name),
+                "sample_row": self.get_sample_row(table_name)
             }
             for table_name in self.get_table_names()
         ]
@@ -119,8 +131,21 @@ class DatabaseManager:
 
 def get_database_schema_string(db_manager: DatabaseManager) -> str:
     schema_info = db_manager.get_database_info()
-    return "\n".join(
-        f"Table: {table['table_name']}\nColumns:\n" +
-        "\n".join(f"  - {col[0]} ({col[1]})" for col in table['column_names'])
-        for table in schema_info
-    )
+    result = []
+
+    for table in schema_info:
+        table_info = [f"Table: {table['table_name']}"]
+        table_info.append("Columns:")
+        table_info.extend(
+            f"  - {col[0]} ({col[1]})" for col in table['columns'])
+
+        if table['sample_row']:
+            table_info.append("\nSample Row:")
+            for col_name, value in table['sample_row'].items():
+                formatted_value = json.dumps(
+                    value, default=DataSerializer.serialize)
+                table_info.append(f"  - {col_name}: {formatted_value}")
+
+        result.append("\n".join(table_info))
+
+    return "\n\n".join(result)
