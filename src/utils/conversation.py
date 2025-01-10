@@ -38,7 +38,7 @@ def handle_chat_completion(new_chat: ChatRequest) -> str:
             response = general_chat_completion(messages=messages)
         else:
             messages = get_format_sql_response_messages(
-                sql_response=sql_response)
+                sql_response=sql_response, query=new_chat.query)
             response = general_chat_completion(messages=messages)
     else:
         response = assistant_message.content

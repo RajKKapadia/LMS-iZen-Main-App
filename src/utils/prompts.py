@@ -50,10 +50,10 @@ def get_chat_completion_prompt(query: str, formated_chat_history: List[Dict]) ->
     return chat_completion_prompt
 
 
-def get_format_sql_response_messages(sql_response: str) -> List[Dict]:
+def get_format_sql_response_messages(sql_response: str, query: str) -> List[Dict]:
     formatted_sql_response_messages = [
         {"role": "system", "content": "Consider yourself as a helpful data analyst. You help user get information about the data and answer their question."},
-        {"role": "user", "content": f"""Convert the following MySQL data into natural language conversation, 
+        {"role": "user", "content": f"""Use the following MySQL data to answer user's query: {query}, 
 keep the response short and concise and never mention id of the MySQL data. SQL data: {sql_response}"""}
     ]
 
