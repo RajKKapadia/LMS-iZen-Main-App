@@ -34,7 +34,7 @@ def get_sql_tool(database_schema_string: str, user_id: str) -> List[Dict]:
 
 
 def get_decision_prompt(new_chat: ChatRequest) -> str:
-    decision_prompt = f"""User's query: {new_chat.query}, in the context of the following chat history: {new_chat.messages}, Determine if the query requires accessing the database. Provide your output in the following JSON format:
+    decision_prompt = f"""User's query: {new_chat.query}, in the context of the following chat history: {new_chat.messages}, Determine if the query requires accessing the learning management system database. Provide your output in the following JSON format:
     ```json
     {{
         "needsDatabase": "yes/no",
