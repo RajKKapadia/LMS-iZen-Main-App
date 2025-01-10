@@ -45,7 +45,7 @@ def get_decision_prompt(new_chat: ChatRequest) -> str:
 
 
 def get_chat_completion_prompt(query: str, formated_chat_history: List[Dict]) -> str:
-    chat_completion_prompt = f"""Consider yourself as a helpful data analyst. A user has asked a question: {query}, in the context of the following chat history: {formated_chat_history}, politely reply that you don"t have the answer for the question."""
+    chat_completion_prompt = f"""Consider yourself as a helpful data analyst. A user has asked a question: {query}, in the context of the following chat history: {formated_chat_history}, politely reply that you don"t have the answer for the question or ask a follow up question to better understand the {query}."""
 
     return chat_completion_prompt
 
