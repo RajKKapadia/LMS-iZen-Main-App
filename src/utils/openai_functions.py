@@ -56,8 +56,10 @@ def tool_chat_completion(new_chat: ChatRequest) -> ChatCompletion | None:
 
         response = client.chat.completions.create(
             messages=new_messages,
-            tools=sql_tool,
-            model=config.FIREWORKS_TOOL_MODEL
+            tools=[sql_tool],
+            model=config.FIREWORKS_TOOL_MODEL,
+            temperature=0.7,
+            max_tokens=1024
         )
 
         return response
