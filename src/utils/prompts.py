@@ -34,12 +34,18 @@ def get_sql_tool(database_schema_string: str, user_id: str) -> List[Dict]:
 
 
 def get_decision_prompt(new_chat: ChatRequest) -> str:
-    decision_prompt = f"""User's query: {new_chat.query}, in the context of the following chat history: {new_chat.messages}, Determine if the query requires accessing the learning management system database. Provide your output in the following JSON format:
-    ```json
-    {{
-        "needsDatabase": "yes/no",
-    }}
-    ```"""
+    decision_prompt = f"""User's query: {new_chat.query}
+Chat history: {new_chat.messages}  
+
+Based on the user's query and the provided chat history, determine if accessing the Learning Management System (LMS) database is necessary to answer the query. Factors to consider include whether the query explicitly or implicitly involves retrieving, updating, or verifying data stored in the LMS database (e.g., course content, user progress, enrollment, etc.). If the information can be answered without referencing the LMS database, respond accordingly.
+
+Provide your output in the following JSON format:
+
+```json
+{{  
+    "needsDatabase": "yes/no"
+}}
+```"""
 
     return decision_prompt
 
