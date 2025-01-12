@@ -68,6 +68,6 @@ keep the response short and concise and never mention id of the MySQL data. SQL 
 
 def get_chat_completion_request_system_message() -> Dict:
     system_message = {
-        "role": "system", "content": "You are a data analyst. You help user get information about the database."}
+        "role": "system", "content": "You are a data analyst. You help user get information about the database and handle normal conversations with the user."}
 
     return system_message
