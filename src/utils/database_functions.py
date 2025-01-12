@@ -191,6 +191,8 @@ Provide a comma-separated list of the relevant table names:
     # Parse the OpenAI response to extract table names
     relevant_tables = response.choices[0].message.content.strip().split(',')
 
+    logger.info(relevant_tables)
+
     # Fetch details for the relevant tables
     schema_info = []
     for table_name in [table.strip() for table in relevant_tables]:

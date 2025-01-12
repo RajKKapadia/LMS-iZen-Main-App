@@ -50,6 +50,7 @@ def tool_chat_completion(new_chat: ChatRequest) -> ChatCompletion | None:
             chat_history=new_chat.messages,
             user_query=new_chat.query
         ), user_id=new_chat.user_id)
+    logger.info(sql_tool)
     try:
         new_messages = []
         system_message = get_chat_completion_request_system_message()
