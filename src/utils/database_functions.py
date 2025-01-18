@@ -11,6 +11,13 @@ from openai import OpenAI
 from config import config
 from src import logging
 
+logger = logging.getLogger(__name__)
+
+client = OpenAI(
+    base_url=config.FIREWORKS_API_ENDPOINT,
+    api_key=config.FIREWORKS_API_KEY
+)
+
 
 class DatabaseConfig:
     def __init__(self):
@@ -76,16 +83,16 @@ class DatabaseManager:
     def __init__(self):
         self.db_config = DatabaseConfig()
 
-    def get_table_names(self) -> List[str]:
+    def get_table_names(self) -> List[Tuple[str, str]]:
         query = """
-            SELECT table_name 
+            SELECT table_name , table_comment
             FROM information_schema.tables 
             WHERE table_schema = %s
         """
         with self.db_config.get_connection() as conn:
             with conn.cursor(prepared=True) as cursor:
                 cursor.execute(query, (config.MYSQL_DB_NAME,))
-                return [table[0] for table in cursor]
+                return [(table[0], table[1]) for table in cursor]
 
     def get_sample_row(self, table_name: str) -> Optional[Dict[str, Any]]:
         query = f"SELECT * FROM {table_name} LIMIT 1"
@@ -131,35 +138,6 @@ class DatabaseManager:
             return ""
 
 
-# def get_database_schema_string(db_manager: DatabaseManager) -> str:
-#     schema_info = db_manager.get_database_info()
-#     result = []
-
-#     for table in schema_info:
-#         table_info = [f"Table: {table['table_name']}"]
-#         table_info.append("Columns:")
-#         table_info.extend(
-#             f"  - {col[0]} ({col[1]})" for col in table['columns'])
-
-#         if table['sample_row']:
-#             table_info.append("\nSample Row:")
-#             for col_name, value in table['sample_row'].items():
-#                 formatted_value = json.dumps(
-#                     value, default=DataSerializer.serialize)
-#                 table_info.append(f"  - {col_name}: {formatted_value}")
-
-#         result.append("\n".join(table_info))
-
-#     return "\n\n".join(result)
-
-logger = logging.getLogger(__name__)
-
-client = OpenAI(
-    base_url=config.FIREWORKS_API_ENDPOINT,
-    api_key=config.FIREWORKS_API_KEY
-)
-
-
 def get_database_schema_string(
     db_manager: DatabaseManager,
     user_query: str,
@@ -167,6 +145,14 @@ def get_database_schema_string(
 ) -> str:
     # Fetch all table names
     table_names = db_manager.get_table_names()
+
+    formatted_table_strings = [
+        f"Table name: {name}\nTable description: {comment}"
+        for name, comment in table_names
+    ]
+
+    logger.info("Tables:")
+    logger.info(formatted_table_strings)
 
     # Prepare prompt for OpenAI
     prompt = f"""You are an AI assistant tasked with analyzing database structures.
@@ -176,8 +162,7 @@ User Query: {user_query}
 
 Chat History: {chat_history}
 
-Available Tables:
-{', '.join(table_names)}
+Available Tables: {formatted_table_strings}
 
 Provide a comma-separated list of the relevant table names:
 """
